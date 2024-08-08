@@ -106,8 +106,15 @@ const WatchLater: React.FC = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2, width: '100%' }}>
                     <Stack spacing={2} sx={{ marginRight: 2 }}>
                         <Button
-                            variant="outlined"
+                            variant="contained"
+                            color={viewOption === 'playlist' ? 'primary' : 'default'}
                             onClick={() => setViewOption(viewOption === 'playlist' ? 'views' : 'playlist')}
+                            sx={{
+                                backgroundColor: viewOption === 'playlist' ? 'primary.main' : 'grey.300',
+                                '&:hover': {
+                                    backgroundColor: viewOption === 'playlist' ? 'primary.dark' : 'grey.400',
+                                },
+                            }}
                         >
                             {viewOption === 'playlist' ? 'Switch to Views' : 'Switch to Playlists'}
                         </Button>
@@ -118,6 +125,12 @@ const WatchLater: React.FC = () => {
                                 color="primary"
                                 startIcon={<AddIcon />}
                                 onClick={handleCreate}
+                                sx={{
+                                    backgroundColor: 'primary.main',
+                                    '&:hover': {
+                                        backgroundColor: 'primary.dark',
+                                    },
+                                }}
                             >
                                 Create Playlist
                             </Button>
@@ -125,13 +138,31 @@ const WatchLater: React.FC = () => {
                     </Stack>
 
                     {viewOption === 'playlist' && isLoggedIn && (
-                        <FormControl sx={{ minWidth: 120, marginLeft: 'auto' }}>
-                            <InputLabel id="sort-select-label">Sort by</InputLabel>
+                        <FormControl sx={{ minWidth: 180, marginLeft: 'auto' }}>
+                            <InputLabel id="sort-select-label" sx={{ color: 'grey.600' }}>
+                                Sort by
+                            </InputLabel>
                             <Select
                                 labelId="sort-select-label"
                                 value={sortOption}
                                 label="Sort by"
                                 onChange={(e) => setSortOption(e.target.value)}
+                                sx={{
+                                    '& .MuiSelect-select': {
+                                        padding: '10px 14px',
+                                        fontSize: '14px',
+                                        fontWeight: 500,
+                                    },
+                                    '& .MuiOutlinedInput-notchedOutline': {
+                                        borderColor: 'grey.400',
+                                    },
+                                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                                        borderColor: 'grey.600',
+                                    },
+                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                        borderColor: 'primary.main',
+                                    },
+                                }}
                             >
                                 <MenuItem value="dateDesc">Newest First</MenuItem>
                                 <MenuItem value="dateAsc">Oldest First</MenuItem>

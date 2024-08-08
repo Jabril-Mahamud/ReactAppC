@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, CardMedia, IconButton, Typography, Box, Avatar } from '@mui/material';
+import { Card, CardContent, CardMedia, IconButton, Typography, Box, Avatar, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { Delete as DeleteIcon, MoreVert as MoreVertIcon } from '@mui/icons-material';
 import ReactPlayer from 'react-player';
 
@@ -16,9 +16,11 @@ interface PlaylistCardProps {
     playlist: Playlist;
     onDelete: (id: number) => void;
     aspectRatio?: number;
+    sortOption: string;
+    handleSortOptionChange: (option: string) => void;
 }
 
-const PlaylistCard: React.FC<PlaylistCardProps> = ({ playlist, onDelete, aspectRatio = 4 / 3 }) => {
+const PlaylistCard: React.FC<PlaylistCardProps> = ({ playlist, onDelete, aspectRatio = 4 / 3, sortOption, handleSortOptionChange }) => {
     const paddingTop = `${(1 / aspectRatio) * 100}%`;
 
     return (
@@ -72,9 +74,25 @@ const PlaylistCard: React.FC<PlaylistCardProps> = ({ playlist, onDelete, aspectR
                                 {playlist.date} at {playlist.time}
                             </Typography>
                         </Box>
-                        <IconButton size="small" onClick={() => onDelete(playlist.id)} color="error">
-                            <DeleteIcon />
-                        </IconButton>
+                        <Box>
+                            <FormControl sx={{ minWidth: 120, marginRight: 2 }}>
+                                <InputLabel id="sort-select-label">Sort by</InputLabel>
+                                <Select
+                                    labelId="sort-select-label"
+                                    value={sortOption}
+                                    label="Sort by"
+                                    onChange={(e) => handleSortOptionChange(e.target.value)}
+                                >
+                                    <MenuItem value="dateDesc">Newest First</MenuItem>
+                                    <MenuItem value="dateAsc">Oldest First</MenuItem>
+                                    <MenuItem value="contentAsc">Content (A-Z)</MenuItem>
+                                    <MenuItem value="contentDesc">Content (Z-A)</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <IconButton size="small" onClick={() => onDelete(playlist.id)} color="error">
+                                <DeleteIcon />
+                            </IconButton>
+                        </Box>
                     </CardContent>
                 </Box>
             </Card>
