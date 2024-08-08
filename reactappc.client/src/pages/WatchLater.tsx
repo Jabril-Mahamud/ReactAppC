@@ -97,85 +97,89 @@ const WatchLater: React.FC = () => {
     };
 
     return (
-        <Box sx={{ maxWidth: 1200, margin: 'auto', padding: 2 }}>
-            <Typography variant="h4" component="h1" gutterBottom>
-                {viewOption === 'playlist' ? 'Playlists' : 'Video Feed'}
-            </Typography>
+        <Box sx={{ maxWidth: 1200, margin: '0 auto', padding: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Typography variant="h4" component="h1" gutterBottom>
+                    {viewOption === 'playlist' ? 'Playlists' : 'Video Feed'}
+                </Typography>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2 }}>
-                <Stack spacing={2} sx={{ marginRight: 2 }}>
-                    <Button
-                        variant="outlined"
-                        onClick={() => setViewOption(viewOption === 'playlist' ? 'views' : 'playlist')}
-                    >
-                        {viewOption === 'playlist' ? 'Switch to Views' : 'Switch to Playlists'}
-                    </Button>
+                <Box sx={{ display: 'flex', alignItems: 'center', marginBottom: 2, width: '100%' }}>
+                    <Stack spacing={2} sx={{ marginRight: 2 }}>
+                        <Button
+                            variant="outlined"
+                            onClick={() => setViewOption(viewOption === 'playlist' ? 'views' : 'playlist')}
+                        >
+                            {viewOption === 'playlist' ? 'Switch to Views' : 'Switch to Playlists'}
+                        </Button>
+
+                        {viewOption === 'playlist' && isLoggedIn && (
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                startIcon={<AddIcon />}
+                                onClick={handleCreate}
+                            >
+                                Create Playlist
+                            </Button>
+                        )}
+                    </Stack>
 
                     {viewOption === 'playlist' && isLoggedIn && (
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            startIcon={<AddIcon />}
-                            onClick={handleCreate}
-                        >
-                            Create Playlist
-                        </Button>
+                        <FormControl sx={{ minWidth: 120, marginLeft: 'auto' }}>
+                            <InputLabel id="sort-select-label">Sort by</InputLabel>
+                            <Select
+                                labelId="sort-select-label"
+                                value={sortOption}
+                                label="Sort by"
+                                onChange={(e) => setSortOption(e.target.value)}
+                            >
+                                <MenuItem value="dateDesc">Newest First</MenuItem>
+                                <MenuItem value="dateAsc">Oldest First</MenuItem>
+                                <MenuItem value="contentAsc">Content (A-Z)</MenuItem>
+                                <MenuItem value="contentDesc">Content (Z-A)</MenuItem>
+                            </Select>
+                        </FormControl>
                     )}
-                </Stack>
-
-                {viewOption === 'playlist' && isLoggedIn && (
-                    <FormControl sx={{ minWidth: 120, marginLeft: 'auto' }}>
-                        <InputLabel id="sort-select-label">Sort by</InputLabel>
-                        <Select
-                            labelId="sort-select-label"
-                            value={sortOption}
-                            label="Sort by"
-                            onChange={(e) => setSortOption(e.target.value)}
-                        >
-                            <MenuItem value="dateDesc">Newest First</MenuItem>
-                            <MenuItem value="dateAsc">Oldest First</MenuItem>
-                            <MenuItem value="contentAsc">Content (A-Z)</MenuItem>
-                            <MenuItem value="contentDesc">Content (Z-A)</MenuItem>
-                        </Select>
-                    </FormControl>
-                )}
-            </Box>
-
-            {viewOption === 'playlist' ? (
-                isLoggedIn ? (
-                    <Stack spacing={2}>
-                        {playlists.map((playlist) => (
-                            <PlaylistCard
-                                key={playlist.id}
-                                playlist={playlist}
-                                onDelete={handleDelete}
-                                aspectRatio={16 / 9}
-                            />
-                        ))}
-                    </Stack>
-                ) : (
-                    <PlaylistTable playlists={playlists} handleDelete={handleDelete} />
-                )
-            ) : (
-                <Box>
-                    <PlaylistTable playlists={playlists} handleDelete={handleDelete} />
                 </Box>
-            )}
 
-            <PlaylistDialog
-                open={dialogOpen}
-                formData={formData}
-                onClose={handleDialogClose}
-                onChange={handleFormDataChange}
-                onSubmit={handleSubmit}
-            />
+                {viewOption === 'playlist' ? (
+                    isLoggedIn ? (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 2, width: '100%' }}>
+                            {playlists.map((playlist) => (
+                                <PlaylistCard
+                                    key={playlist.id}
+                                    playlist={playlist}
+                                    onDelete={handleDelete}
+                                    aspectRatio={16 / 9}
+                                />
+                            ))}
+                        </Box>
+                    ) : (
+                        <Box sx={{ width: '100%' }}>
+                            <PlaylistTable playlists={playlists} handleDelete={handleDelete} />
+                        </Box>
+                    )
+                ) : (
+                    <Box sx={{ width: '100%' }}>
+                        <PlaylistTable playlists={playlists} handleDelete={handleDelete} />
+                    </Box>
+                )}
 
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={() => setSnackbarOpen(false)}
-                message={snackbarMessage}
-            />
+                <PlaylistDialog
+                    open={dialogOpen}
+                    formData={formData}
+                    onClose={handleDialogClose}
+                    onChange={handleFormDataChange}
+                    onSubmit={handleSubmit}
+                />
+
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={6000}
+                    onClose={() => setSnackbarOpen(false)}
+                    message={snackbarMessage}
+                />
+            </Box>
         </Box>
     );
 };
